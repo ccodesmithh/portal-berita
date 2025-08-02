@@ -64,7 +64,12 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>berita</span></a>
             </li>
-            
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('user.index')}}">
+                    <i class="fas fa-fw fa-user"></i>
+                <span>User</span></a>
+            </li>
+
             
         </ul>
         <!-- End of Sidebar -->

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BeritaController;
+use App\Htpp\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::resource('user', \App\Http\Controllers\UserController::class);
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 });
