@@ -6,13 +6,24 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BeritaController;
 use App\Htpp\Controllers\UserController;
+use App\Http\Controllers\BeritaPenulisController;
+use App\Http\Controllers\PenulisController;
+use App\Http\Controllers\KategoriPenulisController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = Auth::user();
+    if ($user->role == 'admin') {
+        return redirect('/admin/dashboard');
+    }elseif ($user->role == 'penulis') {
+        return redirect('/penulis/dashboard');
+    }else {
+        return redirect('/');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -34,6 +45,19 @@ Route::middleware(['auth', 'role:admin,penulis'])->prefix('admin')->group(functi
     Route::get('berita/{berita}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
     Route::put('berita/{berita}', [BeritaController::class, 'update'])->name('berita.update');
     Route::delete('berita/{berita}', [BeritaController::class, 'destroy'])->name('berita.destroy');
+});
+
+Route::middleware(['auth', 'role:penulis'])->prefix('penulis')->group(function () {
+    Route::get('/dashboard', [PenulisController::class, 'dashboard'])->name('penulis.dashboard');
+
+    Route::resource('kategori', KategoriPenulisController::class);
+    
+    Route::get('berita', [BeritaPenulisController::class, 'index'])->name('penulis.berita.index');
+    Route::get('berita/create', [BeritaPenulisController::class, 'create'])->name('penulis.berita.create');
+    Route::post('berita', [BeritaPenulisController::class, 'store'])->name('penulis.berita.store');
+    Route::get('berita/{berita}/edit', [BeritaPenulisController::class, 'edit'])->name('penulis.berita.edit');
+    Route::put('berita/{berita}', [BeritaPenulisController::class, 'update'])->name('penulis.berita.update');
+    Route::delete('berita/{berita}', [BeritaPenulisController::class, 'destroy'])->name('penulis.berita.destroy');
 });
 
 require __DIR__.'/auth.php';
