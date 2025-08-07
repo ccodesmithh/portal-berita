@@ -50,7 +50,7 @@ Route::middleware(['auth', 'role:admin,penulis'])->prefix('admin')->group(functi
 Route::middleware(['auth', 'role:penulis'])->prefix('penulis')->group(function () {
     Route::get('/dashboard', [PenulisController::class, 'dashboard'])->name('penulis.dashboard');
 
-    Route::resource('kategori', KategoriPenulisController::class);
+    Route::get('kategori', [KategoriPenulisController::class,'index'])->name('penulis.kategori.index');
     
     Route::get('berita', [BeritaPenulisController::class, 'index'])->name('penulis.berita.index');
     Route::get('berita/create', [BeritaPenulisController::class, 'create'])->name('penulis.berita.create');
